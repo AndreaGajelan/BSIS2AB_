@@ -1,5 +1,5 @@
 # CC223-M: Applications Development and Emerging Technologies
-# Activity 3: Python - Object-Oriented Programming
+# Activity 4: Python - Object-Oriented Programming
 
 # Andrea H. Gajelan (AndreaGajelan - Owner)
 # Rogine Mae C. Cubelo  (RogineMaeCubelo - Collaborator)
@@ -9,11 +9,9 @@ import os
 import csv
 from types import ClassMethodDescriptorType
 
-characterInformation = []
-
 # class to CUSTOMIZE CHARACTERS
 class CharacterCustomization: 
-    #characterInformation = []
+    characterInformation = []
     #class attributes:
     charClass = ""
     charWeapon = ""
@@ -22,20 +20,35 @@ class CharacterCustomization:
     
     
     # Method attribute: general 
-    def __init__(self, charClass, charWeapon, charAbility1, charAbility2):
+    def __init__(self, charClass = "", charWeapon = "", charAbility1 = "", charAbility2=""):
         self.charClass = charClass
         self.charWeapon = charWeapon
         self.charAbility1 = charAbility1
         self.charAbility2 = charAbility2
-
+    
     # Method attribute for Customization
     def setCustomization(self):                               # printing of character attributes
         print("\t  Character Type : " + self.charClass)       # printing of character class/type
         print("\t  Character Weapon : " + self.charWeapon)    # printing of character weapon
         print("\t  First Ability : " + self.charAbility1)     # printing of character first ability 
-        print("\t  Second Ability : " + self.charAbility2)    # printing of character second ability 
-        
-        characterInformation = [self.charClass,  self.charWeapon,  self.charAbility1, self.charAbility2]
+        print("\t  Second Ability : " + self.charAbility2 + "\n")    # printing of character second ability 
+
+    
+    def access_csv(self):
+        char_arr = [self.charClass,  self.charWeapon,  self.charAbility1, self.charAbility2]
+        self.characterInformation.append(char_arr)
+        with open('character_information.csv', mode='a') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+
+            csv_writer.writerow(["Class", "Weapon", "Ability 1", "Ability 2"])
+            for row in self.characterInformation:
+                csv_writer.writerow([i for i in row])
+
+        with open('character_information.csv', mode='r') as csv_file:
+            csv_reader = csv.reader(csv_file)
+
+            for line in csv_reader:
+                print(line)
         
 # class for CHARACTER
 class Character:
@@ -129,21 +142,6 @@ class Ability:
             else:
                print("Invalid Choice. Try Inputing numbers from 1 to 4 only.")      
 
-#@ClassMethod
-def access_csv():
-
-        with open('character_information.csv', mode='a') as csv_file:
-            csv_writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-
-            csv_writer.writerow(['Class', 'Weapon', 'Ability 1', 'Ability 2'])
-            csv_writer.writerow(characterInformation)
-
-
-        with open('character_information.csv', mode='r') as csv_file:
-            csv_reader = csv.reader(csv_file)
-
-            for line in csv_reader:
-                print(line)
 
 # HEADER
 def titleCard():
@@ -155,7 +153,6 @@ def titleCard():
 # MAIN FUNCTION
 CharacterCatalog = []
 i = 0
-
 # While loop for both characters
 while i < 1:    
     titleCard()
@@ -163,7 +160,7 @@ while i < 1:
     startchoice = input(" [YES] / [NO] >> ")
     os.system("cls")
  
-    if startchoice == "YES":
+    if startchoice.upper() == "YES":
         titleCard()
         print("\nLet's dive right in!")
         print("First, Pick your Character's Class! \n")
@@ -199,7 +196,7 @@ titleCard()
 for user in CharacterCatalog:
     print("\n Character Number {}".format(i))
     user.setCustomization()
-    access_csv()
+    user.access_csv()
     i += 1
     
 
